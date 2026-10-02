@@ -9,7 +9,6 @@ export function Footer() {
           <div>
             <h3 className="text-xl md:text-2xl font-black text-primary mb-4 md:mb-6 flex items-center gap-2">
               <img src="/logo.png" alt="Venom Media" className="h-8 w-auto object-contain" />
-              Venom Media
             </h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               منصة احترافية مستقبلية لخدمات التواصل الاجتماعي، نوفر لك الأدوات اللازمة للنجاح الرقمي.

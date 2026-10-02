@@ -15,7 +15,7 @@ export function Navbar() {
               alt="Venom Media"
               className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
             />
-            <span className="font-bold text-lg hidden sm:inline-block">Venom Media</span>
+
           </Link>
 
           {/* Navigation Buttons */}
