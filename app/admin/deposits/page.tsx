@@ -88,7 +88,7 @@ export default function AdminDepositsPage() {
                         // Keep legacy systems working by adding to transactions table
                         const { error: txError } = await supabase.from('transactions').insert({
                             user_id: deposit.user_id,
-                            amount: deposit.amount,
+                            amount: deposit.amount / EXCHANGE_RATES.USD_TO_EGP,
                             type: 'deposit',
                             status: 'completed',
                             description: `شحن رصيد عبر ${deposit.payment_method || 'طريقة غير معروفة'}`
