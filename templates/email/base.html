@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venom Media - Email Template</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f172a; direction: rtl;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td align="center" style="padding: 0;">
+                <table role="presentation" style="width: 600px; max-width: 100%; border-collapse: collapse; background-color: #ffffff; margin: 20px auto; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(124, 58, 237, 0.2);">
+                    
+                    <!-- Header with Logo -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%); padding: 40px 20px; text-align: center;">
+                            <img src="{{.SiteURL}}/logo.png" alt="Venom Media" style="max-width: 250px; height: auto; margin-bottom: 10px;">
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 40px 30px; background-color: #ffffff;">
+                            <!-- Title -->
+                            <h1 style="color: #1e293b; font-size: 28px; margin: 0 0 20px 0; text-align: center; font-weight: 700;">
+                                {{.Title}}
+                            </h1>
+                            
+                            <!-- Body Content -->
+                            <div style="color: #475569; font-size: 16px; line-height: 1.8; margin-bottom: 30px;">
+                                {{.Content}}
+                            </div>
+                            
+                            <!-- Call to Action Button -->
+                            <table role="presentation" style="margin: 30px auto;">
+                                <tr>
+                                    <td align="center">
+                                        <a href="{{.ActionURL}}" style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #7C3AED 0%, #6366F1 100%); color: #ffffff; text-decoration: none; font-weight: 600; font-size: 16px; border-radius: 12px; box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);">
+                                            {{.ActionText}}
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f8fafc; padding: 30px; text-align: center; border-top: 1px solid #e2e8f0;">
+                            <p style="color: #64748b; font-size: 14px; margin: 0 0 15px 0; line-height: 1.6;">
+                                منصة احترافية لخدمات التواصل الاجتماعي
+                            </p>
+                            
+                            <!-- Social Links -->
+                            <div style="margin: 20px 0;">
+                                <a href="#" style="display: inline-block; margin: 0 10px;">
+                                    <img src="{{.SiteURL}}/social-icons/instagram.png" alt="Instagram" style="width: 32px; height: 32px;">
+                                </a>
+                                <a href="#" style="display: inline-block; margin: 0 10px;">
+                                    <img src="{{.SiteURL}}/social-icons/facebook.png" alt="Facebook" style="width: 32px; height: 32px;">
+                                </a>
+                                <a href="#" style="display: inline-block; margin: 0 10px;">
+                                    <img src="{{.SiteURL}}/social-icons/twitter.png" alt="Twitter" style="width: 32px; height: 32px;">
+                                </a>
+                            </div>
+                            
+                            <p style="color: #94a3b8; font-size: 12px; margin: 15px 0 0 0;">
+                                © 2026 Venom Media. جميع الحقوق محفوظة.
+                            </p>
+                            
+                            <p style="color: #cbd5e1; font-size: 11px; margin: 10px 0 0 0;">
+                                <a href="{{.SiteURL}}/unsubscribe" style="color: #94a3b8; text-decoration: underline;">إلغاء الاشتراك</a>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

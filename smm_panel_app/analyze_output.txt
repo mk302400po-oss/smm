@@ -1,0 +1,107 @@
+﻿Analyzing smm_panel_app...                                      
+
+warning - Unnecessary cast - lib\screens\admin\activity_log_tab.dart:142:30 - unnecessary_cast
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\activity_log_tab.dart:238:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\activity_log_tab.dart:324:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\activity_log_tab.dart:384:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\activity_log_tab.dart:438:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\activity_log_tab.dart:439:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\activity_log_tab.dart:539:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\activity_log_tab.dart:564:40 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\activity_log_tab.dart:585:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\activity_log_tab.dart:588:44 - deprecated_member_use
+warning - The value of the field '_totalUsers' isn't used - lib\screens\admin\admin_panel_screen.dart:23:7 - unused_field
+warning - The value of the field '_totalOrders' isn't used - lib\screens\admin\admin_panel_screen.dart:24:7 - unused_field
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\admin_panel_screen.dart:441:40 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\screens\admin\orders_management_tab.dart:98:30 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\screens\admin\orders_management_tab.dart:104:11 - use_build_context_synchronously
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\screens\admin\orders_management_tab.dart:115:9 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\screens\admin\orders_management_tab.dart:116:9 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\orders_management_tab.dart:186:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\orders_management_tab.dart:202:31 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\screens\admin\users_management_tab.dart:86:11 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\screens\admin\users_management_tab.dart:91:11 - use_build_context_synchronously
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\screens\admin\users_management_tab.dart:109:17 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\screens\admin\users_management_tab.dart:110:17 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\screens\admin\users_management_tab.dart:117:17 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\screens\admin\users_management_tab.dart:118:17 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\screens\admin\users_management_tab.dart:129:30 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\screens\admin\users_management_tab.dart:135:11 - use_build_context_synchronously
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\users_management_tab.dart:179:51 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\users_management_tab.dart:180:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\users_management_tab.dart:203:61 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\admin\users_management_tab.dart:204:58 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\screens\admin\users_management_tab.dart:286:56 - use_build_context_synchronously
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\auth\login_screen.dart:74:48 - deprecated_member_use
+warning - Duplicate import - lib\screens\home\home_screen.dart:9:8 - duplicate_import
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\home\home_screen.dart:193:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\home\home_screen.dart:205:51 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\screens\home\home_screen.dart:312:46 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\screens\home\home_screen.dart:320:25 - use_build_context_synchronously
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\home\home_screen.dart:351:32 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\home\home_screen.dart:378:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\notifications\notifications_screen.dart:110:23 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\notifications\notifications_screen.dart:134:58 - deprecated_member_use
+   info - The private field _categories could be 'final' - lib\screens\orders\new_order_screen.dart:20:16 - prefer_final_fields
+warning - The value of the field '_categories' isn't used - lib\screens\orders\new_order_screen.dart:20:16 - unused_field
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\screens\orders\new_order_screen.dart:182:15 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\screens\orders\new_order_screen.dart:207:17 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\screens\orders\new_order_screen.dart:234:17 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\orders\orders_list_screen.dart:134:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\orders\orders_list_screen.dart:195:39 - deprecated_member_use
+warning - Duplicate import - lib\screens\wallet\wallet_screen.dart:6:8 - duplicate_import
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\screens\wallet\wallet_screen.dart:188:19 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\wallet\wallet_screen.dart:215:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\wallet\wallet_screen.dart:217:62 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\wallet\wallet_screen.dart:310:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\wallet\wallet_screen.dart:311:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\wallet\wallet_screen.dart:499:64 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\wallet\wallet_screen.dart:541:41 - deprecated_member_use
+   info - Don't invoke 'print' in production code - lib\services\notification_service.dart:78:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\notification_service.dart:86:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\notification_service.dart:91:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\notification_service.dart:101:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\notification_service.dart:104:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\notification_service.dart:244:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\notification_service.dart:254:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\notification_service.dart:260:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\notification_service.dart:265:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\notification_service.dart:270:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\notification_service.dart:278:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\notification_service.dart:285:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\notification_service.dart:290:5 - avoid_print
+warning - Unused import: 'package:supabase_flutter/supabase_flutter.dart' - lib\services\notification_service_inapp.dart:2:8 - unused_import
+   info - The imported package 'http' isn't a dependency of the importing package - lib\services\supabase_service.dart:3:8 - depend_on_referenced_packages
+warning - The operand can't be 'null', so the condition is always 'false' - lib\services\supabase_service.dart:305:20 - unnecessary_null_comparison
+warning - Dead code - lib\services\supabase_service.dart:305:29 - dead_code
+warning - The operand can't be 'null', so the condition is always 'false' - lib\services\supabase_service.dart:323:20 - unnecessary_null_comparison
+warning - Dead code - lib\services\supabase_service.dart:323:29 - dead_code
+warning - The operand can't be 'null', so the condition is always 'false' - lib\services\supabase_service.dart:389:20 - unnecessary_null_comparison
+warning - Dead code - lib\services\supabase_service.dart:389:29 - dead_code
+warning - The operand can't be 'null', so the condition is always 'false' - lib\services\supabase_service.dart:544:20 - unnecessary_null_comparison
+warning - Dead code - lib\services\supabase_service.dart:544:29 - dead_code
+warning - The operand can't be 'null', so the condition is always 'false' - lib\services\supabase_service.dart:563:20 - unnecessary_null_comparison
+warning - Dead code - lib\services\supabase_service.dart:563:29 - dead_code
+warning - The operand can't be 'null', so the condition is always 'false' - lib\services\supabase_service.dart:581:20 - unnecessary_null_comparison
+warning - Dead code - lib\services\supabase_service.dart:581:29 - dead_code
+   info - The private field _seenNotificationIds could be 'final' - lib\widgets\notification_listener.dart:17:16 - prefer_final_fields
+
+flutter : 85 issues 
+found. (ran in 5.7s)
+At line:1 char:1
++ flutter analyze 
+--no-pub 2>&1 | 
+Out-File -FilePath 
+"analyze_output.tx ...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (85 issues    
+ found. (ran in 5.    
+7s):String) [], R    
+emoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 

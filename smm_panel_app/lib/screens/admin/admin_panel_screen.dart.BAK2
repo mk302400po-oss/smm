@@ -1,0 +1,487 @@
+import 'dart:async';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../../config/app_theme.dart';
+import '../../services/supabase_service.dart';
+import 'activity_log_tab.dart';
+import 'notifications_screen.dart';
+import 'orders_management_tab.dart';
+import 'users_management_tab.dart';
+
+class AdminPanelScreen extends StatefulWidget {
+  const AdminPanelScreen({super.key});
+
+  @override
+  State<AdminPanelScreen> createState() => _AdminPanelScreenState();
+}
+
+class _AdminPanelScreenState extends State<AdminPanelScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  bool _isLoading = true;
+  List<Map<String, dynamic>> _pendingDeposits = [];
+  int _totalUsers = 0;
+  int _totalOrders = 0;
+  int _unreadNotificationsCount = 0;
+  Timer? _refreshTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+    _checkAdminAndLoadData();
+    _loadUnreadCount();
+
+    // Refresh data every 30 seconds
+    _refreshTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+      _checkAdminAndLoadData();
+      _loadUnreadCount();
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadUnreadCount() async {
+    try {
+      final count = await SupabaseService.getUnreadNotificationsCount();
+      if (mounted) {
+        setState(() {
+          _unreadNotificationsCount = count;
+        });
+      }
+    } catch (e) {
+      // Silently fail
+    }
+  }
+
+  Future<void> _checkAdminAndLoadData() async {
+    try {
+      final currentUser = SupabaseService.currentUser;
+      if (currentUser == null || currentUser.userMetadata?['role'] != 'admin') {
+        if (!mounted) return;
+        Navigator.of(context).pushReplacementNamed('/home');
+        return;
+      }
+
+      final deposits = await SupabaseService.getAllDepositRequests();
+      final users = await SupabaseService.getAllUsers();
+      final orders = await SupabaseService.getAllOrders();
+
+      setState(() {
+        _pendingDeposits = deposits;
+        _totalUsers = users.length;
+        _totalOrders = orders.length;
+        _isLoading = false;
+      });
+
+      // Load unread notifications count
+      _loadUnreadCount();
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('خطأ: $e')));
+    }
+  }
+
+  Future<void> _approveDeposit(
+    String depositId,
+    double amount,
+    String userId,
+  ) async {
+    try {
+      await SupabaseService.approveDeposit(depositId, userId);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('تم قبول الإيداع بنجاح ✅'),
+          backgroundColor: AppColors.success,
+        ),
+      );
+      _checkAdminAndLoadData();
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('خطأ: $e'), backgroundColor: AppColors.error),
+      );
+    }
+  }
+
+  Future<void> _rejectDeposit(String depositId) async {
+    try {
+      final currentUserId = SupabaseService.currentUser?.id ?? '';
+      await SupabaseService.rejectDeposit(
+        depositId,
+        currentUserId,
+        'مرفوض من قبل الإدارة',
+      );
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('تم رفض الإيداع'),
+          backgroundColor: AppColors.warning,
+        ),
+      );
+      _checkAdminAndLoadData();
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('خطأ: $e'), backgroundColor: AppColors.error),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('لوحة الإدارة - Venom Media'),
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        actions: [
+          // Notifications Bell Icon
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.notifications),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NotificationsScreen(),
+                    ),
+                  ).then((_) => _loadUnreadCount());
+                },
+              ),
+              if (_unreadNotificationsCount > 0)
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: AppColors.error,
+                      shape: BoxShape.circle,
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 16,
+                      minHeight: 16,
+                    ),
+                    child: Text(
+                      _unreadNotificationsCount > 9
+                          ? '9+'
+                          : _unreadNotificationsCount.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+        bottom: TabBar(
+          controller: _tabController,
+          indicatorColor: Colors.white,
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.white70,
+          tabs: const [
+            Tab(icon: Icon(Icons.request_quote), text: 'الإيداعات'),
+            Tab(icon: Icon(Icons.people), text: 'المستخدمين'),
+            Tab(icon: Icon(Icons.shopping_cart), text: 'الطلبات'),
+            Tab(icon: Icon(Icons.history), text: 'السجل'),
+          ],
+        ),
+      ),
+      body: Column(
+        children: [
+          // Stats Header
+          Container(
+            padding: const EdgeInsets.all(AppSizes.md),
+            color: AppColors.primary.withValues(alpha: 0.1),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildStatCard(
+                    'إيداعات معلقة',
+                    _pendingDeposits.length.toString(),
+                    Icons.pending_actions,
+                    AppColors.warning,
+                  ),
+                ),
+                const SizedBox(width: AppSizes.sm),
+                Expanded(
+                  child: _buildStatCard(
+                    'إجمالي المستخدمين',
+                    _totalUsers.toString(),
+                    Icons.people,
+                    AppColors.info,
+                  ),
+                ),
+                const SizedBox(width: AppSizes.sm),
+                Expanded(
+                  child: _buildStatCard(
+                    'إجمالي الطلبات',
+                    _totalOrders.toString(),
+                    Icons.shopping_bag,
+                    AppColors.success,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Tab Views
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildDepositsTab(),
+                const UsersManagementTab(),
+                const OrdersManagementTab(),
+                const ActivityLogTab(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSizes.sm),
+        child: Column(
+          children: [
+            Icon(icon, size: 24, color: color),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            ),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 10,
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDepositsTab() {
+    if (_pendingDeposits.isEmpty) {
+      return Card(
+        margin: const EdgeInsets.all(AppSizes.lg),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSizes.lg),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.inbox_outlined,
+                  size: 48,
+                  color: AppColors.textSecondary.withValues(alpha: 0.5),
+                ),
+                const SizedBox(height: AppSizes.sm),
+                const Text('لا توجد طلبات إيداع'),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(AppSizes.md),
+      itemCount: _pendingDeposits.length,
+      itemBuilder: (context, index) {
+        final deposit = _pendingDeposits[index];
+        
+        // Safe parsing with null checks
+        final createdAtStr = deposit['created_at'] as String?;
+        final DateTime createdAt = createdAtStr != null 
+            ? DateTime.tryParse(createdAtStr) ?? DateTime.now()
+            : DateTime.now();
+        
+        final status = (deposit['status'] as String?) ?? 'pending';
+
+        Color statusColor = AppColors.warning;
+        String statusText = 'قيد المراجعة';
+        if (status == 'approved') {
+          statusColor = AppColors.success;
+          statusText = 'مقبول';
+        } else if (status == 'rejected') {
+          statusColor = AppColors.error;
+          statusText = 'مرفوض';
+        }
+
+        return Card(
+          margin: const EdgeInsets.only(bottom: AppSizes.md),
+          child: Padding(
+            padding: const EdgeInsets.all(AppSizes.md),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '\$${((deposit['amount'] as num?) ?? 0.0).toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.sm,
+                        vertical: AppSizes.xs,
+                      ),
+                      decoration: BoxDecoration(
+                        color: statusColor.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(AppSizes.radiusS),
+                      ),
+                      child: Text(
+                        statusText,
+                        style: TextStyle(
+                          color: statusColor,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSizes.sm),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.payment,
+                      size: 16,
+                      color: AppColors.textSecondary,
+                    ),
+                    const SizedBox(width: AppSizes.xs),
+                    Text(
+                      deposit['payment_method'] ?? '-',
+                      style: const TextStyle(color: AppColors.textSecondary),
+                    ),
+                  ],
+                ),
+                if (deposit['transaction_id'] != null) ...[
+                  const SizedBox(height: AppSizes.xs),
+                  Row(\n                    children: [
+                      const Icon(
+                        Icons.receipt,
+                        size: 16,
+                        color: AppColors.textSecondary,
+                      ),
+                      const SizedBox(width: AppSizes.xs),
+                      Text(
+                        'رقم العملية: ${deposit['transaction_id']}',
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+                const SizedBox(height: AppSizes.xs),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.access_time,
+                      size: 16,
+                      color: AppColors.textSecondary,
+                    ),
+                    const SizedBox(width: AppSizes.xs),
+                    Text(
+                      DateFormat('yyyy-MM-dd HH:mm').format(createdAt),
+                      style: const TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+
+                if (status == 'pending') ...[
+                  const SizedBox(height: AppSizes.md),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () => _approveDeposit(
+                            deposit['id'],
+                            (deposit['amount'] as num).toDouble(),
+                            deposit['user_id'],
+                          ),
+                          icon: const Icon(Icons.check),
+                          label: const Text('قبول'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.success,
+                            foregroundColor: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: AppSizes.sm),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () => _rejectDeposit(deposit['id']),
+                          icon: const Icon(Icons.close),
+                          label: const Text('رفض'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.error,
+                            foregroundColor: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

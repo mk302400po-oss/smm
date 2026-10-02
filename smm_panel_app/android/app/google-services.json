@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "340766198824",
+    "project_id": "smm-panel-app-bf044",
+    "storage_bucket": "smm-panel-app-bf044.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340766198824:android:b8c3d1630f33a9be25391d",
+        "android_client_info": {
+          "package_name": "com.venommedia.smm_panel_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZjo-ySe5SgEu9f-_4xRiUVq_YBdKcVtk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
