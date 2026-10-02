@@ -25,7 +25,8 @@ export default function AdminPage() {
         totalUsers: 0,
         totalOrders: 0,
         totalRevenue: 0,
-        pendingDeposits: 0
+        pendingDeposits: 0,
+        providerBalance: null as number | null
     })
     const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([])
     const [isLoading, setIsLoading] = useState(true)
@@ -68,8 +69,19 @@ export default function AdminPage() {
                 totalUsers: usersCount || 0,
                 totalOrders: ordersCount || 0,
                 totalRevenue: totalRevenue,
-                pendingDeposits: pendingCount || 0
+                pendingDeposits: pendingCount || 0,
+                providerBalance: null // Initial state
             })
+
+            // Fetch Provider Balance (non-blocking)
+            fetch('/api/admin/provider-balance')
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.balance) {
+                        setStats(prev => ({ ...prev, providerBalance: parseFloat(data.balance) }))
+                    }
+                })
+                .catch(err => console.error('Failed to fetch provider balance:', err))
 
             // Fetch recent transactions
             const { data: transactions } = await supabase
@@ -153,7 +165,7 @@ export default function AdminPage() {
             </div>
 
             {/* Stats Cards */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
                 <div className="bg-card border border-border shadow-sm rounded-xl p-6 hover:scale-105 transition-transform">
                     <div className="flex items-center justify-between">
                         <div>
@@ -192,6 +204,19 @@ export default function AdminPage() {
                             <h3 className="text-3xl font-bold mt-2 text-foreground">{stats.pendingDeposits}</h3>
                         </div>
                         <div className="text-5xl">⏳</div>
+                    </div>
+                </div>
+
+                <div className="bg-card border border-border shadow-sm rounded-xl p-6 hover:scale-105 transition-transform">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-sm text-muted-foreground">رصيد السيرفر الأساسي</p>
+                            <h3 className="text-3xl font-bold mt-2 text-foreground">
+                                {stats.providerBalance !== null ? formatCurrency(stats.providerBalance) : '...'}
+                            </h3>
+                            <p className="text-xs text-muted-foreground mt-1">المتبقي في XFollowr</p>
+                        </div>
+                        <div className="text-5xl">🏦</div>
                     </div>
                 </div>
             </div>
