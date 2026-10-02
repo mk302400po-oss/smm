@@ -212,9 +212,11 @@ export default function AdminPage() {
                         <div>
                             <p className="text-sm text-muted-foreground">رصيد السيرفر الأساسي</p>
                             <h3 className="text-3xl font-bold mt-2 text-foreground">
-                                {stats.providerBalance !== null ? formatCurrency(stats.providerBalance) : '...'}
+                                {stats.providerBalance !== null ? displayAsEGP(stats.providerBalance) : '...'}
                             </h3>
-                            <p className="text-xs text-muted-foreground mt-1">المتبقي في XFollowr</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                                {stats.providerBalance !== null ? `(${formatCurrency(stats.providerBalance)})` : ''} المتبقي في XFollowr
+                            </p>
                         </div>
                         <div className="text-5xl">🏦</div>
                     </div>
