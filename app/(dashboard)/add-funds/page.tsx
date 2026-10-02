@@ -33,7 +33,6 @@ const PAYMENT_METHODS = [
         id: 'instapay',
         name: 'Instapay',
         logoUrl: '/logos/instapay.png',
-        logoUrl: '/logos/instapay.png',
         icon: (
             <svg className="w-8 h-8" viewBox="0 0 100 100" fill="currentColor">
                 <circle cx="35" cy="50" r="20" opacity="0.6" />
