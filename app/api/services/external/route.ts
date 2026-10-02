@@ -14,12 +14,13 @@ async function isAuthorized(request: Request) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return false
 
-    const { data: userData } = await supabase
+    const { data } = await supabase
         .from('users')
         .select('role')
         .eq('id', user.id)
         .single()
         
+    const userData = data as any;
     return userData?.role === 'admin'
 }
 
