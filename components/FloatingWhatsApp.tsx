@@ -11,8 +11,7 @@ export default function FloatingWhatsApp({
 }: FloatingWhatsAppProps) {
     // قائمة أرقام الدعم - سيتم اختيار رقم عشوائي عند كل زيارة
     const supportNumbers = [
-        '+201550289974',
-        '+201142112506'
+        '+201550289974'
     ]
 
     // اختيار رقم عشوائي من القائمة
