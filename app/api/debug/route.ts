@@ -9,7 +9,8 @@ export async function GET() {
     if (error || !services) return NextResponse.json({ error })
 
     let updated = 0
-    for (const service of services) {
+    const servicesList = services as any[]
+    for (const service of servicesList) {
         const str = (service.name + ' ' + (service.category || '')).toLowerCase()
         let newPlatform = 'other'
 
