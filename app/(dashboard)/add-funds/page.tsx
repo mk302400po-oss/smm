@@ -51,7 +51,6 @@ const PAYMENT_METHODS = [
         id: 'etisalat_cash',
         name: 'اتصالات كاش',
         logoUrl: '/logos/etisalat.png',
-        logoUrl: '/logos/etisalat.png',
         icon: (
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17 2H7C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5zm0 18H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3zM12 7c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z" />
@@ -68,7 +67,6 @@ const PAYMENT_METHODS = [
     {
         id: 'redotpay',
         name: 'RedotPay',
-        logoUrl: '/logos/redotpay.png',
         logoUrl: '/logos/redotpay.png',
         icon: (
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
@@ -88,7 +86,6 @@ const PAYMENT_METHODS = [
         id: 'binance',
         name: 'Binance Pay',
         logoUrl: '/logos/binance.png',
-        logoUrl: '/logos/binance.png',
         icon: (
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2L2 12l10 10 10-10L12 2zm0 4.2L17.8 12 12 17.8 6.2 12 12 6.2z" />
@@ -106,7 +103,6 @@ const PAYMENT_METHODS = [
     {
         id: 'bybit',
         name: 'Bybit',
-        logoUrl: '/logos/bybit.png',
         logoUrl: '/logos/bybit.png',
         icon: (
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
