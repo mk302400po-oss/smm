@@ -23,6 +23,7 @@ const PAYMENT_METHODS = [
             { label: 'شبكة BNB Smart Chain', value: '0x31df56a796daf911bb6296619979f4f414230570' },
             { label: 'شبكة Arbitrum One', value: '0x31df56a796daf911bb6296619979f4f414230570' }
         ],
+        details: { label: '', value: '' },
         instructions: '📌 قم بتحويل USDT عبر إحدى الشبكتين الموضحتين أعلاه.\n📌 بعد إتمام التحويل، انسخ "رقم المعاملة" (TxID) وضعه في الأسفل.\n\n⚡ النظام سيقوم بالتأكد وإضافة الرصيد لحسابك في ثوانٍ تلقائياً!',
         color: 'from-yellow-500 to-yellow-700',
         borderColor: 'border-yellow-500/50',
@@ -42,6 +43,7 @@ const PAYMENT_METHODS = [
             { label: 'شبكة BNB Smart Chain', value: '0x7c26410550815f70f122a95a48d26ce2490e7c44' },
             { label: 'شبكة Arbitrum One', value: '0x7c26410550815f70f122a95a48d26ce2490e7c44' }
         ],
+        details: { label: '', value: '' },
         instructions: '📌 قم بتحويل USDT عبر إحدى الشبكتين الموضحتين أعلاه.\n📌 بعد إتمام التحويل، انسخ "رقم المعاملة" (TxID) وضعه في الأسفل.\n\n⚡ النظام سيقوم بالتأكد وإضافة الرصيد لحسابك في ثوانٍ تلقائياً!',
         color: 'from-gray-600 to-gray-800',
         borderColor: 'border-gray-500/50',
