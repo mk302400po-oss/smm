@@ -37,35 +37,13 @@ export default function AdminUsersPage() {
 
     const fetchUsers = async () => {
         try {
-            // Fetch users with order counts
-            const { data: usersData, error } = await supabase
-                .from('users')
-                .select(`
-                    id,
-                    email,
-                    role,
-                    balance,
-                    created_at,
-                    full_name,
-                    is_banned
-                `)
-                .order('created_at', { ascending: false })
+            // Fetch users from the secure admin API (bypasses RLS)
+            const res = await fetch('/api/admin/users')
+            const data = await res.json()
 
-            if (error) throw error
+            if (!res.ok) throw new Error(data.error || 'Failed to fetch users')
 
-            // Get order counts for each user
-            const usersWithOrders = await Promise.all(
-                (usersData || []).map(async (u) => {
-                    const { count } = await supabase
-                        .from('orders')
-                        .select('id', { count: 'exact', head: true })
-                        .eq('user_id', u.id)
-
-                    return { ...u, orders_count: count || 0 }
-                })
-            )
-
-            setUsers(usersWithOrders as User[])
+            setUsers(data.users || [])
         } catch (error) {
             console.error('Error fetching users:', error)
         } finally {
