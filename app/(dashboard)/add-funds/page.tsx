@@ -220,7 +220,6 @@ export default function AddFundsPage() {
                 .from('deposits')
                 .getPublicUrl(fileName)
 
-            // @ts-expect-error - Supabase type generation issue
             const { error: depositError } = await supabase
                 .from('deposit_requests')
                 .insert({
@@ -232,7 +231,7 @@ export default function AddFundsPage() {
                     status: 'pending',
                     screenshot_url: publicUrl,
                     created_at: new Date().toISOString()
-                })
+                } as any)
 
             if (depositError) throw depositError
 
