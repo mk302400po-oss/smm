@@ -32,8 +32,35 @@ export async function GET(request: Request) {
         },
       }
     )
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
+    const { data: sessionData, error } = await supabase.auth.exchangeCodeForSession(code)
+    
+    if (!error && sessionData?.user) {
+      const user = sessionData.user
+      
+      // Ensure user exists in public.users table (especially for Google OAuth)
+      const { data: existingUser } = await supabase
+        .from('users')
+        .select('id')
+        .eq('id', user.id)
+        .single()
+        
+      if (!existingUser) {
+        // Use service role to insert bypassing RLS
+        const { createClient: createAdminClient } = require('@supabase/supabase-js')
+        const adminClient = createAdminClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.SUPABASE_SERVICE_ROLE_KEY!
+        )
+        
+        await adminClient.from('users').insert({
+            id: user.id,
+            email: user.email,
+            full_name: user.user_metadata?.full_name || user.email,
+            role: 'user',
+            balance: 0
+        })
+      }
+      
       return NextResponse.redirect(`${origin}${next}`)
     }
   }
