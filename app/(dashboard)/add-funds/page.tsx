@@ -240,7 +240,7 @@ export default function AddFundsPage() {
                 title: 'طلب شحن رصيد',
                 message: `تم استلام طلب شحن رصيد بقيمة ${amount} عبر ${selectedMethod.name} وهو قيد المراجعة`,
                 type: 'info'
-            })
+            } as any)
 
             setSuccess('تم إرسال طلب الشحن بنجاح، سيتم مراجعة الطلب وإضافة الرصيد قريباً')
             setAmount('')
