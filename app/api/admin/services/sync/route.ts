@@ -1,13 +1,16 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-export async function POST(request: Request) {
+async function handleSync(request: Request) {
     try {
-        // 1. Verify Authorization (Internal Secret or Admin)
+        // 1. Verify Authorization (Internal Secret, Admin, or Vercel Cron)
         const secret = request.headers.get('x-internal-secret')
+        const authHeader = request.headers.get('authorization')
         let isAdmin = false;
 
         if (secret === process.env.SUPABASE_SERVICE_ROLE_KEY) {
+            isAdmin = true;
+        } else if (authHeader === `Bearer ${process.env.CRON_SECRET}`) {
             isAdmin = true;
         } else {
             const { createClient: createServerClient } = require('@/lib/supabase/server')
@@ -134,4 +137,12 @@ export async function POST(request: Request) {
         console.error('Sync Error:', error)
         return NextResponse.json({ error: 'Failed to sync services' }, { status: 500 })
     }
+}
+
+export async function GET(request: Request) {
+    return handleSync(request)
+}
+
+export async function POST(request: Request) {
+    return handleSync(request)
 }
