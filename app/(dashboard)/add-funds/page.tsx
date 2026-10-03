@@ -6,10 +6,48 @@ import { useAuth } from '@/lib/hooks/useAuth'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-
+import { toast } from 'react-hot-toast'
 import { EXCHANGE_RATES, updateExchangeRate } from '@/lib/utils/format'
 
 const PAYMENT_METHODS = [
+    {
+        id: 'binance',
+        name: 'Binance USDT [تلقائي]',
+        logoUrl: '/logos/binance.png',
+        icon: (
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L2 12l10 10 10-10L12 2zm0 4.2L17.8 12 12 17.8 6.2 12 12 6.2z" />
+            </svg>
+        ),
+        networks: [
+            { label: 'شبكة BNB Smart Chain', value: '0x31df56a796daf911bb6296619979f4f414230570' },
+            { label: 'شبكة Arbitrum One', value: '0x31df56a796daf911bb6296619979f4f414230570' }
+        ],
+        instructions: '📌 قم بتحويل USDT عبر إحدى الشبكتين الموضحتين أعلاه.\n📌 بعد إتمام التحويل، انسخ "رقم المعاملة" (TxID) وضعه في الأسفل.\n\n⚡ النظام سيقوم بالتأكد وإضافة الرصيد لحسابك في ثوانٍ تلقائياً!',
+        color: 'from-yellow-500 to-yellow-700',
+        borderColor: 'border-yellow-500/50',
+        textColor: 'text-yellow-400',
+        isAutoCrypto: true
+    },
+    {
+        id: 'bybit',
+        name: 'Bybit USDT [تلقائي]',
+        logoUrl: '/logos/bybit.png',
+        icon: (
+            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+            </svg>
+        ),
+        networks: [
+            { label: 'شبكة BNB Smart Chain', value: '0x7c26410550815f70f122a95a48d26ce2490e7c44' },
+            { label: 'شبكة Arbitrum One', value: '0x7c26410550815f70f122a95a48d26ce2490e7c44' }
+        ],
+        instructions: '📌 قم بتحويل USDT عبر إحدى الشبكتين الموضحتين أعلاه.\n📌 بعد إتمام التحويل، انسخ "رقم المعاملة" (TxID) وضعه في الأسفل.\n\n⚡ النظام سيقوم بالتأكد وإضافة الرصيد لحسابك في ثوانٍ تلقائياً!',
+        color: 'from-gray-600 to-gray-800',
+        borderColor: 'border-gray-500/50',
+        textColor: 'text-gray-400',
+        isAutoCrypto: true
+    },
     {
         id: 'axis_pay',
         name: 'Axis Pay',
@@ -27,7 +65,8 @@ const PAYMENT_METHODS = [
         },
         color: 'from-orange-600 to-orange-800',
         borderColor: 'border-orange-500/50',
-        textColor: 'text-orange-400'
+        textColor: 'text-orange-400',
+        isAutoCrypto: false
     },
     {
         id: 'instapay',
@@ -45,7 +84,8 @@ const PAYMENT_METHODS = [
         },
         color: 'from-purple-600 to-purple-800',
         borderColor: 'border-purple-500/50',
-        textColor: 'text-purple-400'
+        textColor: 'text-purple-400',
+        isAutoCrypto: false
     },
     {
         id: 'etisalat_cash',
@@ -62,7 +102,8 @@ const PAYMENT_METHODS = [
         },
         color: 'from-green-600 to-green-800',
         borderColor: 'border-green-500/50',
-        textColor: 'text-green-400'
+        textColor: 'text-green-400',
+        isAutoCrypto: false
     },
     {
         id: 'redotpay',
@@ -80,42 +121,8 @@ const PAYMENT_METHODS = [
         instructions: '📌 اكتب الايدي أو حسابك الذي قمت بالتحويل منه لسهولة المراجعة\n📌 اكتب الكمية التى تريدها\n\n⛔ تأكد من رقم الايدي الخاص بك جيداً قبل الطلب ⛔',
         color: 'from-blue-600 to-blue-800',
         borderColor: 'border-blue-500/50',
-        textColor: 'text-blue-400'
-    },
-    {
-        id: 'binance',
-        name: 'Binance Pay',
-        logoUrl: '/logos/binance.png',
-        icon: (
-            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L2 12l10 10 10-10L12 2zm0 4.2L17.8 12 12 17.8 6.2 12 12 6.2z" />
-            </svg>
-        ),
-        details: {
-            label: 'Binance ID',
-            value: '545177813'
-        },
-        instructions: '📌 اكتب الايدي أو حسابك الذي قمت بالتحويل منه لسهولة المراجعة\n📌 اكتب الكمية التى تريدها\n\n⛔ تأكد من رقم الايدي الخاص بك جيداً قبل الطلب ⛔',
-        color: 'from-yellow-500 to-yellow-700',
-        borderColor: 'border-yellow-500/50',
-        textColor: 'text-yellow-400'
-    },
-    {
-        id: 'bybit',
-        name: 'Bybit',
-        logoUrl: '/logos/bybit.png',
-        icon: (
-            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-            </svg>
-        ),
-        details: {
-            label: 'Bybit UID',
-            value: '372157946'
-        },
-        color: 'from-gray-600 to-gray-800',
-        borderColor: 'border-gray-500/50',
-        textColor: 'text-gray-400'
+        textColor: 'text-blue-400',
+        isAutoCrypto: false
     }
 ]
 
@@ -123,13 +130,20 @@ export default function AddFundsPage() {
     const { user } = useAuth()
     const router = useRouter()
     const [selectedMethod, setSelectedMethod] = useState(PAYMENT_METHODS[0])
+    
+    // States for manual flow
     const [amount, setAmount] = useState('')
     const [senderPhone, setSenderPhone] = useState('')
     const [file, setFile] = useState<File | null>(null)
+    const fileInputRef = useRef<HTMLInputElement>(null)
+    
+    // States for crypto flow
+    const [txId, setTxId] = useState('')
+    
+    // Shared states
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
-    const fileInputRef = useRef<HTMLInputElement>(null)
     const supabase = createClient()
     const [rate, setRate] = useState(EXCHANGE_RATES.USD_TO_EGP)
 
@@ -145,7 +159,51 @@ export default function AddFundsPage() {
         }
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmitCrypto = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setError('')
+        setSuccess('')
+        
+        if (!txId || txId.trim() === '') {
+            setError('الرجاء إدخال رقم المعاملة (TxID)')
+            return
+        }
+
+        setLoading(true)
+        try {
+            const res = await fetch('/api/payments/crypto/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    txId: txId.trim(),
+                    provider: selectedMethod.id,
+                    userId: user?.id
+                })
+            })
+            
+            const data = await res.json()
+            if (!res.ok) {
+                throw new Error(data.error || 'حدث خطأ أثناء التحقق من المعاملة')
+            }
+            
+            setSuccess(`تم التحقق بنجاح! تم إضافة ${data.amountUSD} دولار إلى حسابك (${data.amountEGP} ج.م)`)
+            setTxId('')
+            toast.success('تم شحن رصيدك بنجاح! 🚀')
+            
+            // Redirect after 3s to refresh balance
+            setTimeout(() => {
+                router.refresh()
+            }, 3000)
+
+        } catch (err: any) {
+            console.error('Crypto error:', err)
+            setError(err.message || 'حدث خطأ أثناء الاتصال بالخادم')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleSubmitManual = async (e: React.FormEvent) => {
         e.preventDefault()
         setError('')
         setSuccess('')
@@ -157,8 +215,8 @@ export default function AddFundsPage() {
             return
         }
 
-        if (!senderPhone || senderPhone.trim().length < 10) {
-            setError('الرجاء إدخال رقم الهاتف الذي حولت منه')
+        if (!senderPhone || senderPhone.trim().length < 5) {
+            setError('الرجاء إدخال بيانات التحويل (رقم الهاتف أو ID)')
             setLoading(false)
             return
         }
@@ -170,27 +228,23 @@ export default function AddFundsPage() {
         }
 
         try {
-            // 1. Upload image
             const fileExt = file.name.split('.').pop()
             const fileName = `${user?.id}/${Date.now()}.${fileExt}`
-            const { error: uploadError, data: uploadData } = await supabase.storage
+            const { error: uploadError } = await supabase.storage
                 .from('deposits')
                 .upload(fileName, file)
 
             if (uploadError) throw uploadError
 
-            // 2. Get public URL
             const { data: { publicUrl } } = supabase.storage
                 .from('deposits')
                 .getPublicUrl(fileName)
 
-            // 3. Create deposit request
-            // Store EGP amount directly, will be converted to USD upon approval
-            const { error: depositError } = await (supabase
-                .from('deposit_requests') as any)
+            const { error: depositError } = await supabase
+                .from('deposit_requests')
                 .insert({
                     user_id: user?.id,
-                    amount: Number(amount), // Store EGP directly
+                    amount: Number(amount),
                     payment_method: selectedMethod.id,
                     sender_phone: senderPhone,
                     transaction_id: null,
@@ -201,8 +255,7 @@ export default function AddFundsPage() {
 
             if (depositError) throw depositError
 
-            // 4. Create notification
-            await (supabase.from('notifications') as any).insert({
+            await supabase.from('notifications').insert({
                 user_id: user?.id,
                 title: 'طلب شحن رصيد',
                 message: `تم استلام طلب شحن رصيد بقيمة ${amount} عبر ${selectedMethod.name} وهو قيد المراجعة`,
@@ -240,19 +293,23 @@ export default function AddFundsPage() {
             </div>
 
             {/* Payment Methods Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {PAYMENT_METHODS.map((method) => (
                     <button
                         key={method.id}
-                        onClick={() => setSelectedMethod(method)}
+                        onClick={() => {
+                            setSelectedMethod(method);
+                            setError('');
+                            setSuccess('');
+                        }}
                         className={`relative p-4 rounded-xl border-2 transition-all duration-300 flex flex-col items-center gap-3 group ${selectedMethod.id === method.id
                             ? `${method.borderColor} bg-accent shadow-sm`
                             : 'border-border bg-card hover:border-primary/20 hover:bg-accent'
                             }`}
                     >
                         <div className={`w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br ${method.color} text-white shadow-sm overflow-hidden`}>
-                            {(method as any).logoUrl ? (
-                                <img src={(method as any).logoUrl} alt={method.name} className="w-full h-full object-contain bg-white p-2" />
+                            {method.logoUrl ? (
+                                <img src={method.logoUrl} alt={method.name} className="w-full h-full object-contain bg-white p-2" />
                             ) : (
                                 method.icon
                             )}
@@ -262,6 +319,9 @@ export default function AddFundsPage() {
                         </span>
                         {selectedMethod.id === method.id && (
                             <div className="absolute top-2 right-2 w-3 h-3 rounded-full bg-success shadow-sm"></div>
+                        )}
+                        {method.isAutoCrypto && (
+                            <span className="absolute top-2 left-2 text-[10px] font-bold px-1.5 py-0.5 rounded-sm bg-success/20 text-success uppercase">Auto</span>
                         )}
                     </button>
                 ))}
@@ -280,50 +340,77 @@ export default function AddFundsPage() {
                     </h2>
 
                     <div className="space-y-6 text-muted-foreground relative z-10">
-                        <div className="p-6 rounded-xl bg-background border border-border text-center">
-                            <p className="text-sm text-muted-foreground mb-2">{selectedMethod.details.label}</p>
-                            <div className="flex items-center justify-center gap-3">
-                                <p className="text-2xl font-mono font-bold text-foreground tracking-wider">{selectedMethod.details.value}</p>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className={`p-2 h-auto ${selectedMethod.textColor} hover:bg-accent rounded-lg`}
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(selectedMethod.details.value)
-                                        // Optional: Add toast notification here
-                                    }}
-                                >
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                                    </svg>
-                                </Button>
+                        {selectedMethod.networks ? (
+                            <div className="space-y-4">
+                                {selectedMethod.networks.map((net, idx) => (
+                                    <div key={idx} className="p-6 rounded-xl bg-background border border-border text-center">
+                                        <p className="text-sm text-muted-foreground mb-2">{net.label}</p>
+                                        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
+                                            <p className="text-xl md:text-2xl font-mono font-bold text-foreground tracking-wider break-all max-w-[280px] md:max-w-none">{net.value}</p>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className={`p-2 h-auto ${selectedMethod.textColor} hover:bg-accent rounded-lg flex-shrink-0`}
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(net.value)
+                                                    toast.success('تم النسخ بنجاح!')
+                                                }}
+                                            >
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                                                </svg>
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        </div>
+                        ) : (
+                            <div className="p-6 rounded-xl bg-background border border-border text-center">
+                                <p className="text-sm text-muted-foreground mb-2">{selectedMethod.details.label}</p>
+                                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
+                                    <p className="text-xl md:text-2xl font-mono font-bold text-foreground tracking-wider break-all max-w-[280px] md:max-w-none">{selectedMethod.details.value}</p>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className={`p-2 h-auto ${selectedMethod.textColor} hover:bg-accent rounded-lg flex-shrink-0`}
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(selectedMethod.details.value)
+                                            toast.success('تم النسخ بنجاح!')
+                                        }}
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                                        </svg>
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
 
-                        <ul className="space-y-4 text-sm">
-                            <li className="flex gap-3 items-start">
-                                <span className={`w-6 h-6 rounded-full bg-accent flex items-center justify-center flex-shrink-0 text-xs font-bold ${selectedMethod.textColor}`}>1</span>
-                                <p>قم بتحويل المبلغ المراد شحنه إلى {selectedMethod.details.label} الموضح أعلاه.</p>
-                            </li>
-                            <li className="flex gap-3 items-start">
-                                <span className={`w-6 h-6 rounded-full bg-accent flex items-center justify-center flex-shrink-0 text-xs font-bold ${selectedMethod.textColor}`}>2</span>
-                                <p>احتفظ بلقطة شاشة (Screenshot) واضحة لعملية التحويل تثبت إتمام العملية.</p>
-                            </li>
-                            <li className="flex gap-3 items-start">
-                                <span className={`w-6 h-6 rounded-full bg-accent flex items-center justify-center flex-shrink-0 text-xs font-bold ${selectedMethod.textColor}`}>3</span>
-                                <p>أدخل المبلغ الذي قمت بتحويله وأرفق الصورة في النموذج المقابل.</p>
-                            </li>
-                        </ul>
+                        {!selectedMethod.isAutoCrypto && (
+                            <ul className="space-y-4 text-sm">
+                                <li className="flex gap-3 items-start">
+                                    <span className={`w-6 h-6 rounded-full bg-accent flex items-center justify-center flex-shrink-0 text-xs font-bold ${selectedMethod.textColor}`}>1</span>
+                                    <p>قم بتحويل المبلغ المراد شحنه إلى {selectedMethod.details.label} الموضح أعلاه.</p>
+                                </li>
+                                <li className="flex gap-3 items-start">
+                                    <span className={`w-6 h-6 rounded-full bg-accent flex items-center justify-center flex-shrink-0 text-xs font-bold ${selectedMethod.textColor}`}>2</span>
+                                    <p>احتفظ بلقطة شاشة (Screenshot) واضحة لعملية التحويل تثبت إتمام العملية.</p>
+                                </li>
+                                <li className="flex gap-3 items-start">
+                                    <span className={`w-6 h-6 rounded-full bg-accent flex items-center justify-center flex-shrink-0 text-xs font-bold ${selectedMethod.textColor}`}>3</span>
+                                    <p>أدخل المبلغ الذي قمت بتحويله وأرفق الصورة في النموذج المقابل.</p>
+                                </li>
+                            </ul>
+                        )}
 
-                        {/* Special Instructions for Binance & RedotPay */}
-                        {(selectedMethod as any).instructions && (
+                        {selectedMethod.instructions && (
                             <div className={`mt-6 p-4 rounded-lg border ${selectedMethod.borderColor} bg-background`}>
                                 <div className="flex items-start gap-3">
                                     <svg className={`w-5 h-5 flex-shrink-0 mt-0.5 ${selectedMethod.textColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    <div className={`text-sm whitespace-pre-line ${selectedMethod.textColor}`}>
-                                        {(selectedMethod as any).instructions}
+                                    <div className={`text-sm font-semibold leading-relaxed whitespace-pre-line ${selectedMethod.textColor}`}>
+                                        {selectedMethod.instructions}
                                     </div>
                                 </div>
                             </div>
@@ -342,115 +429,167 @@ export default function AddFundsPage() {
                         بيانات التحويل
                     </h2>
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-muted-foreground flex items-center justify-between w-full">
-                                المبلغ المحول (ج.م)
-                                <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
-                                    سعر الصرف: 1$ = {rate.toFixed(2)} ج.م
-                                </span>
-                            </label>
-                            <Input
-                                type="number"
-                                placeholder="0.00"
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
-                                className="bg-background border-input text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 text-lg"
-                                disabled={loading}
-                            />
-                            {amount && !isNaN(Number(amount)) && Number(amount) > 0 && (
-                                <p className="text-sm text-muted-foreground mt-1">
-                                    سوف تحصل على: <span className="font-bold text-success">${(Number(amount) / rate).toFixed(2)}</span>
-                                </p>
-                            )}
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                                رقم الهاتف المحول منه
-                                <span className="text-destructive">*</span>
-                                <span className="text-xs bg-destructive/10 text-destructive px-2 py-0.5 rounded-full border border-destructive/20">إجباري</span>
-                            </label>
-                            <Input
-                                type="tel"
-                                placeholder="01xxxxxxxxx"
-                                value={senderPhone}
-                                onChange={(e) => setSenderPhone(e.target.value)}
-                                className="bg-background border-input text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 text-lg font-mono"
-                                dir="ltr"
-                                disabled={loading}
-                            />
-                            <p className="text-xs text-muted-foreground">أدخل رقم الهاتف الذي حولت منه المبلغ</p>
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                                صورة التحويل
-                                <span className="text-destructive">*</span>
-                                <span className="text-xs bg-destructive/10 text-destructive px-2 py-0.5 rounded-full border border-destructive/20">إجباري</span>
-                            </label>
-                            <div className="relative">
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleFileChange}
-                                    ref={fileInputRef}
-                                    className="hidden"
-                                    id="file-upload"
+                    {selectedMethod.isAutoCrypto ? (
+                        /* AUTO CRYPTO FORM */
+                        <form onSubmit={handleSubmitCrypto} className="space-y-6">
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                                    رقم المعاملة (TxID / Transaction Hash)
+                                    <span className="text-destructive">*</span>
+                                </label>
+                                <Input
+                                    type="text"
+                                    placeholder="أدخل الـ TxID هنا..."
+                                    value={txId}
+                                    onChange={(e) => setTxId(e.target.value)}
+                                    className="bg-background border-input text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 text-lg font-mono"
+                                    dir="ltr"
                                     disabled={loading}
                                 />
-                                <label
-                                    htmlFor="file-upload"
-                                    className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl cursor-pointer transition-all duration-300 ${file
-                                        ? 'border-success/50 bg-success/10'
-                                        : 'border-border bg-background hover:bg-accent hover:border-primary/50'
-                                        }`}
-                                >
-                                    {file ? (
-                                        <div className="text-center text-success">
-                                            <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                            </svg>
-                                            <p className="text-sm font-medium truncate max-w-[200px]">{file.name}</p>
-                                        </div>
-                                    ) : (
-                                        <div className="text-center text-muted-foreground">
-                                            <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
-                                            <p className="text-sm">اضغط لرفع الصورة</p>
-                                        </div>
-                                    )}
+                                <p className="text-xs text-muted-foreground mt-2">
+                                    بمجرد وضعك لرقم المعاملة هنا، سيبحث النظام عنه في شبكتنا ويضيف الرصيد تلقائياً. تأكد من أن التحويل قد اكتمل من طرفك (Completed).
+                                </p>
+                            </div>
+                            
+                            {error && (
+                                <div className="p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-2">
+                                    <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    {error}
+                                </div>
+                            )}
+
+                            {success && (
+                                <div className="p-3 text-sm text-success bg-success/10 border border-success/20 rounded-lg flex items-center gap-2">
+                                    <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    {success}
+                                </div>
+                            )}
+
+                            <Button
+                                type="submit"
+                                loading={loading}
+                                className={`w-full text-white py-6 text-lg font-bold bg-gradient-to-r ${selectedMethod.color} hover:opacity-90 transition-opacity flex gap-2 items-center justify-center`}
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                                تحقق وإضافة الرصيد
+                            </Button>
+                        </form>
+                    ) : (
+                        /* MANUAL FORM (CASH) */
+                        <form onSubmit={handleSubmitManual} className="space-y-6">
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-muted-foreground flex items-center justify-between w-full">
+                                    المبلغ المحول (ج.م)
+                                    <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
+                                        سعر الصرف: 1$ = {rate.toFixed(2)} ج.م
+                                    </span>
                                 </label>
+                                <Input
+                                    type="number"
+                                    placeholder="0.00"
+                                    value={amount}
+                                    onChange={(e) => setAmount(e.target.value)}
+                                    className="bg-background border-input text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 text-lg"
+                                    disabled={loading}
+                                />
+                                {amount && !isNaN(Number(amount)) && Number(amount) > 0 && (
+                                    <p className="text-sm text-muted-foreground mt-1">
+                                        سوف تحصل على: <span className="font-bold text-success">${(Number(amount) / rate).toFixed(2)}</span>
+                                    </p>
+                                )}
                             </div>
-                        </div>
 
-                        {error && (
-                            <div className="p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-2">
-                                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                {error}
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                                    بيانات المحول (رقم الهاتف أو ID)
+                                    <span className="text-destructive">*</span>
+                                </label>
+                                <Input
+                                    type="text"
+                                    placeholder="01xxxxxxxxx / ID..."
+                                    value={senderPhone}
+                                    onChange={(e) => setSenderPhone(e.target.value)}
+                                    className="bg-background border-input text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 text-lg font-mono"
+                                    dir="ltr"
+                                    disabled={loading}
+                                />
+                                <p className="text-xs text-muted-foreground">أدخل رقم الهاتف الذي حولت منه المبلغ أو حسابك</p>
                             </div>
-                        )}
 
-                        {success && (
-                            <div className="p-3 text-sm text-success bg-success/10 border border-success/20 rounded-lg flex items-center gap-2">
-                                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                </svg>
-                                {success}
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                                    صورة التحويل
+                                    <span className="text-destructive">*</span>
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                        ref={fileInputRef}
+                                        className="hidden"
+                                        id="file-upload"
+                                        disabled={loading}
+                                    />
+                                    <label
+                                        htmlFor="file-upload"
+                                        className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl cursor-pointer transition-all duration-300 ${file
+                                            ? 'border-success/50 bg-success/10'
+                                            : 'border-border bg-background hover:bg-accent hover:border-primary/50'
+                                            }`}
+                                    >
+                                        {file ? (
+                                            <div className="text-center text-success">
+                                                <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                <p className="text-sm font-medium truncate max-w-[200px]">{file.name}</p>
+                                            </div>
+                                        ) : (
+                                            <div className="text-center text-muted-foreground">
+                                                <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
+                                                <p className="text-sm">اضغط لرفع الصورة</p>
+                                            </div>
+                                        )}
+                                    </label>
+                                </div>
                             </div>
-                        )}
 
-                        <Button
-                            type="submit"
-                            loading={loading}
-                            className={`w-full text-white py-6 text-lg bg-gradient-to-r ${selectedMethod.color} hover:opacity-90 transition-opacity`}
-                        >
-                            إرسال طلب الشحن
-                        </Button>
-                    </form>
+                            {error && (
+                                <div className="p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-2">
+                                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    {error}
+                                </div>
+                            )}
+
+                            {success && (
+                                <div className="p-3 text-sm text-success bg-success/10 border border-success/20 rounded-lg flex items-center gap-2">
+                                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    {success}
+                                </div>
+                            )}
+
+                            <Button
+                                type="submit"
+                                loading={loading}
+                                className={`w-full text-white py-6 text-lg font-bold bg-gradient-to-r ${selectedMethod.color} hover:opacity-90 transition-opacity`}
+                            >
+                                إرسال طلب الشحن
+                            </Button>
+                        </form>
+                    )}
                 </div>
             </div>
         </div>
