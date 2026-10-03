@@ -143,7 +143,8 @@ export async function POST(request: Request) {
                             amount: cost
                         })
                     }
-                    return NextResponse.json({ error: `Provider Error: ${externalData.error}` }, { status: 400 })
+                    // Instead of exposing provider error (like low balance), show a friendly message
+                    return NextResponse.json({ error: 'عذراً، يوجد ضغط على هذه الخدمة حالياً أو تحت الصيانة. تم استرجاع رصيدك، يرجى المحاولة بعد قليل أو اختيار خدمة بديلة.' }, { status: 400 })
                 }
             } catch (error) {
                 // Refund if fetch fails using admin privileges
@@ -154,7 +155,7 @@ export async function POST(request: Request) {
                         amount: cost
                     })
                 }
-                return NextResponse.json({ error: 'Failed to connect to provider' }, { status: 500 })
+                return NextResponse.json({ error: 'حدث خطأ في الاتصال بالشبكة. تم استرجاع رصيدك، يرجى المحاولة بعد قليل.' }, { status: 500 })
             }
         }
 
