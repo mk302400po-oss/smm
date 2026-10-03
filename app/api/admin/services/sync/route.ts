@@ -72,7 +72,7 @@ async function handleSync(request: Request) {
         let insertedCount = 0;
 
         // 5. Process and Filter Services
-        const forbiddenWords = ['احمد', 'شخص', 'ahmed', 'شخصي', 'private', 'خاص']
+        const forbiddenWords = ['احمد', 'شخص', 'ahmed', 'شخصي', 'private', 'خاص', 'لا تجربها', 'تجربها', 'do not try']
         
         for (const ext of externalServices) {
             const price = parseFloat(ext.rate)
