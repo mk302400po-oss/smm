@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { createClient as createServerClient } from '@/lib/supabase/server'
 
 async function handleSync(request: Request) {
     try {
@@ -13,7 +14,6 @@ async function handleSync(request: Request) {
         } else if (authHeader === `Bearer ${process.env.CRON_SECRET}`) {
             isAdmin = true;
         } else {
-            const { createClient: createServerClient } = require('@/lib/supabase/server')
             const supabaseAuth = await createServerClient()
             const { data: { user } } = await supabaseAuth.auth.getUser()
             
@@ -23,7 +23,8 @@ async function handleSync(request: Request) {
                     .select('role')
                     .eq('id', user.id)
                     .single()
-                if (userData?.role === 'admin') isAdmin = true;
+                const uData = userData as any;
+                if (uData?.role === 'admin') isAdmin = true;
             }
         }
 
