@@ -49,26 +49,6 @@ const PAYMENT_METHODS = [
         isAutoCrypto: true
     },
     {
-        id: 'axis_pay',
-        name: 'Axis Pay',
-        logoUrl: '/logos/axis_pay.png',
-        icon: (
-            <svg className="w-8 h-8" viewBox="0 0 100 100" fill="currentColor">
-                <path d="M50 15 L85 85 L15 85 Z" opacity="0.3" />
-                <path d="M50 30 L70 75 L30 75 Z" opacity="0.6" />
-                <path d="M50 45 L55 65 L45 65 Z" />
-            </svg>
-        ),
-        details: {
-            label: 'رقم المحفظة',
-            value: '01035920160'
-        },
-        color: 'from-orange-600 to-orange-800',
-        borderColor: 'border-orange-500/50',
-        textColor: 'text-orange-400',
-        isAutoCrypto: false
-    },
-    {
         id: 'instapay',
         name: 'Instapay',
         logoUrl: '/logos/instapay.png',
@@ -240,6 +220,7 @@ export default function AddFundsPage() {
                 .from('deposits')
                 .getPublicUrl(fileName)
 
+            // @ts-expect-error - Supabase type generation issue
             const { error: depositError } = await supabase
                 .from('deposit_requests')
                 .insert({
