@@ -52,7 +52,7 @@ const PAYMENT_METHODS = [
     },
     {
         id: 'instapay',
-        name: 'Instapay',
+        name: 'Instapay [تلقائي]',
         logoUrl: '/logos/instapay.png',
         icon: (
             <svg className="w-8 h-8" viewBox="0 0 100 100" fill="currentColor">
@@ -67,11 +67,12 @@ const PAYMENT_METHODS = [
         color: 'from-purple-600 to-purple-800',
         borderColor: 'border-purple-500/50',
         textColor: 'text-purple-400',
-        isAutoCrypto: false
+        isAutoCrypto: false,
+        hasAutoBadge: true
     },
     {
         id: 'etisalat_cash',
-        name: 'اتصالات كاش',
+        name: 'اتصالات كاش [تلقائي]',
         logoUrl: '/logos/etisalat.png',
         icon: (
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
@@ -85,7 +86,8 @@ const PAYMENT_METHODS = [
         color: 'from-green-600 to-green-800',
         borderColor: 'border-green-500/50',
         textColor: 'text-green-400',
-        isAutoCrypto: false
+        isAutoCrypto: false,
+        hasAutoBadge: true
     },
     {
         id: 'redotpay',
@@ -302,7 +304,7 @@ export default function AddFundsPage() {
                         {selectedMethod.id === method.id && (
                             <div className="absolute top-2 right-2 w-3 h-3 rounded-full bg-success shadow-sm"></div>
                         )}
-                        {method.isAutoCrypto && (
+                        {(method.isAutoCrypto || method.hasAutoBadge) && (
                             <span className="absolute top-2 left-2 text-[10px] font-bold px-1.5 py-0.5 rounded-sm bg-success/20 text-success uppercase">Auto</span>
                         )}
                     </button>
