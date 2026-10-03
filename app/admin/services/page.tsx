@@ -247,36 +247,12 @@ export default function AdminServicesPage() {
 
     const handleImportAll = async () => {
         try {
-            const servicesToImport = externalServices.map(ext => {
-                const isPackage = ext.type === 'package' || ext.max <= 1 || ext.min === ext.max
-
-                const payload: any = {
-                    name: ext.name,
-                    platform: detectPlatform(ext.name, ext.category),
-                    category: ext.category || 'followers',
-                    min_quantity: ext.min,
-                    max_quantity: ext.max,
-                    status: 'active',
-                    provider_service_id: ext.service
-                }
-
-                if (isPackage) {
-                    payload.price = parseFloat(ext.rate)
-                    payload.price_per_1000 = null
-                } else {
-                    payload.price_per_1000 = parseFloat(ext.rate)
-                    payload.price = null
-                }
-                return payload
-            })
-            const { error } = await supabase
-                .from('services')
-                // @ts-ignore - Supabase types not fully generated
-                .insert(servicesToImport)
-
-            if (error) throw error
-
-            alert(`تم استيراد ${servicesToImport.length} خدمة بنجاح! 🚀`)
+            const res = await fetch('/api/admin/services/sync', { method: 'POST' })
+            const data = await res.json()
+            
+            if (!res.ok) throw new Error(data.error || 'Failed to sync')
+                
+            alert(`تم المزامنة بنجاح! تم تحديث ${data.updated} خدمة وإضافة ${data.inserted} خدمة جديدة 🚀`)
             await fetchServices()
             setActiveTab('local')
         } catch (error) {
