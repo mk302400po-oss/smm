@@ -11,11 +11,11 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { data: userData } = await supabase
+    const { data: userData } = (await supabase
         .from('users')
         .select('role')
         .eq('id', user.id)
-        .single()
+        .single()) as any
 
     if (userData?.role !== 'admin') {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
